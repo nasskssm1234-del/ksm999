@@ -13,7 +13,6 @@ module.exports = {
   express: {
     enabled: true,
     // Sur Render/Replit/autres hébergeurs, PORT est souvent imposé.
-    // 3000 en local évite les soucis de permission liés au port 443.
     port: Number(process.env.PORT || 3000)
   },
 
@@ -54,19 +53,43 @@ module.exports = {
     help: ['h', 'commands', 'cmd']
   },
 
-  // Lavalink node.
-  // Important Render note: environment variables override these values.
-  // If Render still shows lavalinkv4.serenetia.com in logs, delete/update
-  // LAVALINK_HOST, LAVALINK_PORT, LAVALINK_PASSWORD and LAVALINK_SECURE on Render.
+  // Lavalink v4 multi-node.
+  // Important : les anciennes variables Render LAVALINK_HOST/PORT/PASSWORD/SECURE
+  // sont volontairement ignorées ici pour éviter que Render force encore un ancien node HS.
+  // Node principal conseillé : Nyx, puis Ruthless en secours.
   lavalink: {
     nodes: [
       {
-        name: "AeroX Ajie 443",
-        identifier: "AeroX Ajie 443",
-        host: process.env.LAVALINK_HOST || "lava-v4.ajieblogs.eu.org",
-        port: Number(process.env.LAVALINK_PORT || 443),
-        password: process.env.LAVALINK_PASSWORD || "https://dsc.gg/ajidevserver",
-        secure: String(process.env.LAVALINK_SECURE || "true").toLowerCase() === "true"
+        name: "Nyx SG1",
+        identifier: "Nyx SG1",
+        host: "sg1-nodelink.nyxbot.app",
+        port: 3000,
+        password: "nyxbot.app/support",
+        secure: false
+      },
+      {
+        name: "Nyx SG2",
+        identifier: "Nyx SG2",
+        host: "sg2-nodelink.nyxbot.app",
+        port: 3000,
+        password: "nyxbot.app/support",
+        secure: false
+      },
+      {
+        name: "Ruthless 80",
+        identifier: "Ruthless 80",
+        host: "pnode.ruthless.qzz.io",
+        port: 80,
+        password: "senna",
+        secure: false
+      },
+      {
+        name: "AeroX Ajie 80 fallback",
+        identifier: "AeroX Ajie 80 fallback",
+        host: "lava-v4.ajieblogs.eu.org",
+        port: 80,
+        password: "https://dsc.gg/ajidevserver",
+        secure: false
       }
     ]
   }

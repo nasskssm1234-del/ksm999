@@ -84,6 +84,7 @@ if (config.enablePrefix) {
 const client = new Client({ intents });
 
 let isLavalinkConnected = false;
+const connectedLavalinkNodes = new Set();
 
 const riffy = new Riffy(client, config.lavalink.nodes, {
   send: (payload) => {
@@ -102,8 +103,10 @@ const queue247 = new Set();
 client.on('ready', async () => {
   console.log(`${config.emojis.success} Logged in as ${client.user.tag}`);
 
-  const firstNode = config.lavalink.nodes[0] || {};
-  console.log(`${config.emojis.info} Connecting Lavalink -> ${firstNode.host}:${firstNode.port} secure=${firstNode.secure}`);
+  console.log(`${config.emojis.info} Lavalink nodes configured:`);
+  for (const node of config.lavalink.nodes) {
+    console.log(`   - ${node.name || node.identifier || 'Node'} -> ${node.host}:${node.port} secure=${node.secure}`);
+  }
 
   try {
     riffy.init(client.user.id);
@@ -151,26 +154,60 @@ client.on('ready', async () => {
 
 client.on('raw', (d) => riffy.updateVoiceState(d));
 
+function getNodeKey(node) {
+  const identifier = node?.name || node?.identifier || node?.options?.identifier;
+  const host = node?.host || node?.options?.host;
+  const port = node?.port || node?.options?.port;
+
+  if (identifier) return String(identifier);
+  if (host && port) return `${host}:${port}`;
+  return 'unknown-node';
+}
+
+function findConfiguredNode(node) {
+  const key = getNodeKey(node);
+  const host = node?.host || node?.options?.host;
+  const port = Number(node?.port || node?.options?.port || 0);
+
+  return config.lavalink.nodes.find((n) =>
+    n.identifier === key ||
+    n.name === key ||
+    (n.host === host && Number(n.port) === port)
+  ) || config.lavalink.nodes[0] || {};
+}
+
 function getNodeLabel(node) {
-  const nodeConfig = config.lavalink.nodes[0] || {};
+  const nodeConfig = findConfiguredNode(node);
   return `${node?.name || node?.identifier || nodeConfig.name || 'Lavalink'} (${nodeConfig.host}:${nodeConfig.port}, secure=${nodeConfig.secure})`;
 }
 
+function refreshLavalinkStatus() {
+  isLavalinkConnected = connectedLavalinkNodes.size > 0;
+}
+
+function getConfiguredNodesText() {
+  return config.lavalink.nodes
+    .map((n) => `${n.name}: ${n.host}:${n.port} secure=${n.secure}`)
+    .join('\n');
+}
+
 riffy.on('nodeConnect', (node) => {
+  connectedLavalinkNodes.add(getNodeKey(node));
+  refreshLavalinkStatus();
   console.log(`${config.emojis.success} Lavalink connected: ${getNodeLabel(node)}`);
-  isLavalinkConnected = true;
 });
 
 riffy.on('nodeError', (node, error) => {
   console.error(`${config.emojis.error} Lavalink error on ${getNodeLabel(node)}:`);
   console.error(error?.message || error);
-  isLavalinkConnected = false;
+  refreshLavalinkStatus();
 });
 
 riffy.on('nodeDisconnect', (node, reason) => {
+  connectedLavalinkNodes.delete(getNodeKey(node));
+  refreshLavalinkStatus();
   console.log(`${config.emojis.error} Lavalink disconnected: ${getNodeLabel(node)}`);
   if (reason) console.log('Disconnect reason:', reason);
-  isLavalinkConnected = false;
 });
 
 process.on('unhandledRejection', (error) => {
@@ -607,7 +644,7 @@ client.on('interactionCreate', async (interaction) => {
     await interaction.deferReply({ ephemeral: false });
 
     if (!isLavalinkConnected) {
-      return interaction.editReply({ content: `${config.emojis.error} Lavalink is not connected. Node actuel: ${config.lavalink.nodes[0].host}:${config.lavalink.nodes[0].port} secure=${config.lavalink.nodes[0].secure}` });
+      return interaction.editReply({ content: `${config.emojis.error} Lavalink is not connected. Nodes testés:\n${getConfiguredNodesText()}` });
     }
 
     try {
@@ -1001,7 +1038,7 @@ client.on('interactionCreate', async (interaction) => {
             }
 
             if (!isLavalinkConnected) {
-              return message.reply(`${config.emojis.error} Lavalink is not connected. Music commands are unavailable.`);
+              return message.reply(`${config.emojis.error} Lavalink is not connected. Nodes testés:\n${getConfiguredNodesText()}`);
             }
 
             try {
