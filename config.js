@@ -54,9 +54,8 @@ module.exports = {
   },
 
   // Lavalink v4 multi-node.
-  // Important : les anciennes variables Render LAVALINK_HOST/PORT/PASSWORD/SECURE
-  // sont volontairement ignorées ici pour éviter que Render force encore un ancien node HS.
-  // Node principal conseillé : Nyx, puis Ruthless en secours.
+  // Configuration propre : uniquement les nodes Nyx qui se connectent correctement.
+  // Ruthless 80 et AeroX Ajie ont été retirés car ils provoquaient des erreurs 530/1006.
   lavalink: {
     nodes: [
       {
@@ -73,22 +72,6 @@ module.exports = {
         host: "sg2-nodelink.nyxbot.app",
         port: 3000,
         password: "nyxbot.app/support",
-        secure: false
-      },
-      {
-        name: "Ruthless 80",
-        identifier: "Ruthless 80",
-        host: "pnode.ruthless.qzz.io",
-        port: 80,
-        password: "senna",
-        secure: false
-      },
-      {
-        name: "AeroX Ajie 80 fallback",
-        identifier: "AeroX Ajie 80 fallback",
-        host: "lava-v4.ajieblogs.eu.org",
-        port: 80,
-        password: "https://dsc.gg/ajidevserver",
         secure: false
       }
     ]

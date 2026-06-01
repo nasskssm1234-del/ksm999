@@ -1,24 +1,24 @@
-# Lavalink Render fix
+# Lavalink Render Setup
 
-Node par défaut configuré :
+Configuration actuelle conseillée : **Nyx uniquement**.
 
-```txt
-host: lava-v4.ajieblogs.eu.org
-port: 443
-password: https://dsc.gg/ajidevserver
-secure: true
-```
-
-Sur Render, vérifie surtout les Environment Variables.
-Si les logs affichent encore `lavalinkv4.serenetia.com`, c’est que Render garde une ancienne variable.
-
-À mettre dans Render > Environment :
+## Nodes actifs
 
 ```txt
-LAVALINK_HOST=lava-v4.ajieblogs.eu.org
-LAVALINK_PORT=443
-LAVALINK_PASSWORD=https://dsc.gg/ajidevserver
-LAVALINK_SECURE=true
+Nyx SG1 : sg1-nodelink.nyxbot.app:3000 secure=false
+Nyx SG2 : sg2-nodelink.nyxbot.app:3000 secure=false
+Password : nyxbot.app/support
 ```
 
-Puis fais Manual Deploy > Clear build cache and deploy.
+## Important
+
+Ruthless 80 a été retiré car il retournait :
+
+```txt
+Unexpected server response: 530
+Disconnect reason: 1006
+```
+
+AeroX/Ajie a aussi été retiré pour éviter les erreurs de certificat SSL ou de déconnexion.
+
+Sur Render, tu peux laisser les variables LAVALINK_HOST/PORT/PASSWORD/SECURE vides : le fichier `config.js` utilise directement Nyx SG1 et Nyx SG2.
