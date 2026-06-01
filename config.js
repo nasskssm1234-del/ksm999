@@ -3,10 +3,10 @@ module.exports = {
   token: process.env.DISCORD_TOKEN,
   prefix: "!",
   enablePrefix: true,
-  supportServer: "https://discord.gg/9MVAPpfs8D",
+  supportServer: "https://discord.gg/KuaShP4bPz",
 
   activity: {
-    name: "/help",
+    name: "Ksm V2",
     type: "LISTENING" // PLAYING, LISTENING, WATCHING, STREAMING, COMPETING
   },
 
@@ -54,8 +54,8 @@ module.exports = {
   },
 
   // Lavalink v4 multi-node.
-  // Configuration propre : uniquement les nodes Nyx qui se connectent correctement.
-  // Ruthless 80 et AeroX Ajie ont été retirés car ils provoquaient des erreurs 530/1006.
+  // Version propre : uniquement les nodes Nyx qui se connectent correctement.
+  // Ruthless et AeroX/Ajie sont supprimés car ils provoquaient des erreurs 530 / 1006.
   lavalink: {
     nodes: [
       {

@@ -1,24 +1,25 @@
-# Lavalink Render Setup
+# Lavalink 2026 Setup
 
-Configuration actuelle conseillée : **Nyx uniquement**.
+Configuration actuelle du bot : nodes Nyx uniquement.
 
-## Nodes actifs
-
-```txt
-Nyx SG1 : sg1-nodelink.nyxbot.app:3000 secure=false
-Nyx SG2 : sg2-nodelink.nyxbot.app:3000 secure=false
-Password : nyxbot.app/support
+```js
+{
+  name: "Nyx SG1",
+  host: "sg1-nodelink.nyxbot.app",
+  port: 3000,
+  password: "nyxbot.app/support",
+  secure: false
+}
 ```
 
-## Important
-
-Ruthless 80 a été retiré car il retournait :
-
-```txt
-Unexpected server response: 530
-Disconnect reason: 1006
+```js
+{
+  name: "Nyx SG2",
+  host: "sg2-nodelink.nyxbot.app",
+  port: 3000,
+  password: "nyxbot.app/support",
+  secure: false
+}
 ```
 
-AeroX/Ajie a aussi été retiré pour éviter les erreurs de certificat SSL ou de déconnexion.
-
-Sur Render, tu peux laisser les variables LAVALINK_HOST/PORT/PASSWORD/SECURE vides : le fichier `config.js` utilise directement Nyx SG1 et Nyx SG2.
+Ruthless et AeroX/Ajie ont été retirés car ils généraient des erreurs de connexion.

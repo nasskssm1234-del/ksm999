@@ -491,7 +491,7 @@ function createHelpContainer() {
             .setStyle(ButtonStyle.Link)
             .setURL(`https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=3165184&scope=bot%20applications.commands`),
           new ButtonBuilder()
-            .setLabel('Support')
+            .setLabel('Contact')
             .setStyle(ButtonStyle.Link)
             .setURL(config.supportServer)
         )
@@ -999,7 +999,7 @@ client.on('interactionCreate', async (interaction) => {
               new ActionRowBuilder()
                 .addComponents(
                   new ButtonBuilder()
-                    .setLabel('Support')
+                    .setLabel('Contact')
                     .setStyle(ButtonStyle.Link)
                     .setURL(config.supportServer)
                 )
@@ -1399,7 +1399,7 @@ client.on('interactionCreate', async (interaction) => {
                 new ActionRowBuilder()
                   .addComponents(
                     new ButtonBuilder()
-                      .setLabel('Support')
+                      .setLabel('Contact')
                       .setStyle(ButtonStyle.Link)
                       .setURL(config.supportServer)
                   )
